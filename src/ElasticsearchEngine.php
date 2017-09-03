@@ -178,7 +178,9 @@ class ElasticsearchEngine extends Engine
         }
 
         $keys = collect($results['hits']['hits'])
-                        ->pluck('_id')->values()->all();
+                        ->pluck('_id')->map(function ($result) {
+                return (integer)$result;
+            })->values()->all();
 
         $models = $model->whereIn(
             $model->getKeyName(), $keys
